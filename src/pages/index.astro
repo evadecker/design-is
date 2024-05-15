@@ -205,8 +205,8 @@ const sentence = [
     }
 
     @media (width < 960px) {
-      gap: 1.5em;
       flex-direction: column;
+      gap: 1em;
 
       fieldset {
         flex-flow: row wrap;
@@ -271,14 +271,14 @@ const sentence = [
     }
 
     &:not(:checked) + label {
-      opacity: 0.3;
+      opacity: 0.2;
       filter: blur(0.1em);
       transition-timing-function: ease-in;
 
       @media (hover: hover) {
         &:hover {
           transition-duration: 0.2s;
-          opacity: 0.8;
+          opacity: 0.7;
         }
       }
     }
