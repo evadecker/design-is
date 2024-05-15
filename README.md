@@ -1,3 +1,7 @@
+![Design is...](public/og.png)
+
 # Design Is
 
-Intention
+For you to define.
+
+⚪️ https://design.eva.town
