@@ -54,7 +54,7 @@ const sentence = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href="http://design.eva.town" />
+    <link rel="canonical" href="https://design.eva.town" />
     <meta name="theme-color" content="#ccc" />
     <title>Design Is</title>
     <meta name="description" content="For you to define." />
@@ -89,6 +89,13 @@ const sentence = [
           ))
         }
       </div>
+      <a
+        class="about"
+        href="https://github.com/evadecker/design-is"
+        aria-label="What's this?"
+        target="_blank"
+        rel="noreferrer">?</a
+      >
       <a class="refresh" href="/" aria-label="refresh">⇄</a>
     </div>
   </body>
@@ -130,6 +137,11 @@ const sentence = [
 </script>
 
 <style lang="scss">
+  :root {
+    --body-size: clamp(1.375rem, 1.2399rem + 0.6757vi, 2rem);
+    --heading-size: clamp(1.7402rem, 1.4938rem + 1.2322vi, 2.88rem);
+  }
+
   // Reset
   *,
   *::before,
@@ -159,9 +171,9 @@ const sentence = [
     }
   }
 
-  :root {
-    --body-size: clamp(1.375rem, 1.2399rem + 0.6757vi, 2rem);
-    --heading-size: clamp(1.7402rem, 1.4938rem + 1.2322vi, 2.88rem);
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 
   // Styles
@@ -227,20 +239,25 @@ const sentence = [
     }
   }
 
+  .about,
   .refresh {
     line-height: 1;
     font-size: var(--heading-size);
     opacity: 0.6;
-    text-decoration: none;
-    color: inherit;
-
     position: fixed;
-    right: var(--body-size);
     bottom: var(--body-size);
 
     &:hover {
       opacity: 1;
     }
+  }
+
+  .about {
+    left: var(--body-size);
+  }
+
+  .refresh {
+    right: var(--body-size);
   }
 
   input[type="radio"] {
