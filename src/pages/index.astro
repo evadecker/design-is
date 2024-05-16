@@ -82,7 +82,12 @@ const sentence = [
                     name={i.toString()}
                     value={word}
                   />
-                  <label for={word}>{word}</label>
+                  <label for={word}>
+                    {word.split("").map((char, i) =>
+                      // prettier-ignore
+                      <span class="char" style={{ transitionDelay: `${i * 0.2}s` }}>{char}</span>
+                    )}
+                  </label>
                 </div>
               ))}
             </fieldset>
@@ -101,29 +106,44 @@ const sentence = [
   </body>
 </html>
 
-<script lang="ts">
-  function selectRandomWords() {
-    const sentence = document.querySelector(".sentence");
-    const fieldsets = sentence?.querySelectorAll("fieldset");
-
-    fieldsets?.forEach((fieldset) => {
-      const inputs = fieldset.querySelectorAll("input");
-      const randomIndex = Math.floor(Math.random() * inputs.length);
-      inputs[randomIndex].checked = true;
-    });
-  }
-
-  selectRandomWords();
-
+<script>
   function setPageTitle() {
-    const words = Array.from(document.querySelectorAll("input:checked")).map(
-      (input) => input.value
-    );
+    const words = Array.from(
+      document.querySelectorAll<HTMLInputElement>("input:checked")
+    ).map((input) => input.value);
     const title = `Design is ${words.join(" ")}`;
     document.title = title;
   }
 
-  setPageTitle();
+  function selectRandomWords(stagger = false) {
+    const sentence = document.querySelector(".sentence");
+    const fieldsets = sentence?.querySelectorAll("fieldset");
+
+    const changeSelection = (fieldset: HTMLFieldSetElement) => {
+      const inputs = fieldset.querySelectorAll("input");
+
+      const randomIndex = Math.floor(Math.random() * inputs.length);
+
+      if (inputs[randomIndex].checked) {
+        changeSelection(fieldset);
+        return;
+      } else {
+        inputs[randomIndex].checked = true;
+      }
+
+      setPageTitle();
+    };
+
+    fieldsets?.forEach((fieldset, i) => {
+      if (stagger) {
+        setTimeout(() => changeSelection(fieldset), (i + 1) * 600);
+      } else {
+        changeSelection(fieldset);
+      }
+    });
+  }
+
+  selectRandomWords(true);
 
   document.body.addEventListener("change", setPageTitle);
 
@@ -131,8 +151,7 @@ const sentence = [
 
   refresh?.addEventListener("click", (event) => {
     event.preventDefault();
-    selectRandomWords();
-    setPageTitle();
+    selectRandomWords(true);
   });
 </script>
 
@@ -202,9 +221,12 @@ const sentence = [
         flex-flow: row wrap;
         align-items: center;
         justify-content: center;
-        gap: 0.15em;
-        column-gap: 0.5em;
+        column-gap: 0;
         max-width: 35ch;
+
+        input[type="radio"] + label {
+          padding-inline: 0.25em;
+        }
       }
     }
   }
@@ -255,14 +277,15 @@ const sentence = [
 
     + label {
       cursor: pointer;
-      transition-property: filter, opacity;
-      transition-duration: 2s;
-      transition-timing-function: ease-out;
+      transition: opacity 1.8s ease-out;
+
+      .char {
+        transition: filter 1.8s ease-out;
+      }
     }
 
     &:not(:checked) + label {
       opacity: 0.2;
-      filter: blur(0.1em);
       transition-timing-function: ease-in;
 
       @media (hover: hover) {
@@ -270,6 +293,11 @@ const sentence = [
           transition-duration: 0.2s;
           opacity: 0.7;
         }
+      }
+
+      .char {
+        filter: blur(0.1em);
+        transition-timing-function: ease-in;
       }
     }
   }
@@ -285,30 +313,6 @@ const sentence = [
     }
 
     &:active {
-    }
-  }
-
-  input[type="radio"] {
-    display: none;
-
-    + label {
-      cursor: pointer;
-      transition-property: filter, opacity;
-      transition-duration: 2s;
-      transition-timing-function: ease-out;
-    }
-
-    &:not(:checked) + label {
-      opacity: 0.3;
-      filter: blur(0.1em);
-      transition-timing-function: ease-in;
-
-      @media (hover: hover) {
-        &:hover {
-          transition-duration: 0.2s;
-          opacity: 0.8;
-        }
-      }
     }
   }
 </style>
